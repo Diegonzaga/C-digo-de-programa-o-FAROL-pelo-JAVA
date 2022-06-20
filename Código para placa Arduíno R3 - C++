@@ -1,0 +1,67 @@
+
+// Define pinos utilizados
+int autoVermelho = 2;
+int autoAmarelo = 3;
+int autoVerde = 4;
+int pinBot = 8;
+int pedVermelho = 11;
+int pedVerde = 12;
+
+// Define variaveis
+int ini = 0;
+
+//******************************************************************************
+ 
+void setup() {
+  // Define os pinos de saidas
+  pinMode(autoVermelho, OUTPUT);
+  pinMode(autoAmarelo, OUTPUT);
+  pinMode(autoVerde, OUTPUT);
+  pinMode(pedVermelho, OUTPUT);
+  pinMode(pedVerde, OUTPUT);
+  // Define o pino de entrada
+  pinMode(pinBot, INPUT_PULLUP);
+}
+
+//******************************************************************************
+ 
+void loop() {
+  // faz a leitura do botão - inicia o semáforo
+  if (digitalRead(pinBot) == LOW) {
+    while (digitalRead(pinBot) == LOW) {} // espera soltar o botão
+    delay(10);
+    // Posição inical após presionar botão. Somente o verde dos carros e o vermelho dos pedestres acesos
+    digitalWrite(autoVerde, HIGH); 
+    digitalWrite(autoVerde, LOW);
+    digitalWrite(autoVerde, LOW);
+    digitalWrite(pedVerde, LOW);
+    digitalWrite(pedVermelho, HIGH);
+    ini = 1;        
+  }
+  // funcionamento do semáforo após pressionar o botão
+  if (ini == 1) {
+  // Acende o verde dos carros e o vermelho dos pedestres
+    digitalWrite(autoVerde, HIGH); 
+    digitalWrite(pedVermelho, HIGH);  
+    delay(5000); // Aguarda 5 segundos
+    digitalWrite(autoVerde, LOW);
+    // apaga o verde dos carros e acende o amarelo
+    digitalWrite(autoAmarelo, HIGH);
+    delay(3000); // aguarda mais 3 segundos
+    // apaga o amarelo dos carros e acende o vermelho
+    digitalWrite(autoAmarelo, LOW); 
+    digitalWrite(autoVermelho, HIGH);
+    // apaga o vermelho dos pedestres e acende o verde
+    digitalWrite(pedVermelho, LOW); 
+    digitalWrite(pedVerde, HIGH);
+    delay(5000);  // aguarda mais 5 segundos
+    digitalWrite(pedVerde, LOW);
+    for(int x = 0; x<5; x++) { // Pisca 5x o vermelho dos pedestres
+      digitalWrite(pedVermelho, HIGH);
+      delay(250);
+      digitalWrite(pedVermelho, LOW);
+      delay(250);
+    }
+    digitalWrite(autoVermelho, LOW);
+  }  
+} 
